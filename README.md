@@ -5,4 +5,6 @@ REQUISITOS:
 -Instalar el EMU8086 
 
 Video:
+
+
 [![Alt text](https://img.youtube.com/vi/HhRtMDyF6Sk/0.jpg)](https://youtu.be/HhRtMDyF6Sk)
