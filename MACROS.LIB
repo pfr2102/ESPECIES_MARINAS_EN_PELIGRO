@@ -1,0 +1,223 @@
+;10      PEDRO FIGUEROA RUIZ     
+CURSOR MACRO ren, col, pag
+    MOV AH, 2
+    MOV DH, ren
+    MOV DL, col
+    MOV BH, 0
+    INT 10H
+CURSOR ENDM
+
+LEER_INFO MACRO VAR
+     MOV AH, 10  
+     LEA DX, VAR
+     INT 21H
+LEER_INFO ENDM
+
+IMP_CAD_SINCOLOR MACRO cadena
+    MOV AH, 9
+    LEA DX, cadena
+    INT 21H
+IMP_CAD_SINCOLOR ENDM
+
+LEER_CAR MACRO
+    MOV AH, 1
+    INT 21H
+LEER_CAR ENDM
+
+ESCRIBIR_CAR MACRO car
+    MOV AH, 2
+    MOV DL, car
+    INT 21H
+ESCRIBIR_CAR ENDM    
+
+SCROLL_ARRIBA MACRO lineas, ren1, col1, ren2, col2, color
+    MOV AH, 6
+    MOV AL, lineas
+    MOV CH, ren1
+    MOV CL, col1
+    MOV DH, ren2
+    MOV DL, col2
+    MOV BH, color
+    INT 10H
+SCROLL_ARRIBA ENDM
+
+CREAR_CARPETA MACRO RUTA
+    MOV AH, 39H
+    LEA DX, ruta
+    INT 21H
+CREAR_CARPETA ENDM
+
+CREAR_ARCHIVO MACRO RUTA
+    MOV AH, 3CH
+    LEA DX, ruta
+    MOV CX, 32   ;ATRIBUTO DE ARCHIVO DE USUARIO
+    INT 21H
+CREAR_ARCHIVO ENDM
+
+
+ESCRIBIR_ARCHIVO MACRO MANEJADOR,TOTALESCRIBIR,DATOSESCRIBIR
+    MOV AH,40H
+    MOV BX,MANEJADOR
+    MOV CX,TOTALESCRIBIR
+    LEA DX,DATOSESCRIBIR
+    INT 21H
+ESCRIBIR_ARCHIVO ENDM
+
+LEER_ARCHIVO MACRO manejador, cuantosLeer, datosLeidos
+    MOV AH, 3FH
+    MOV BX, manejador
+    MOV CX, cuantosLeer
+    LEA DX, datosLeidos
+    INT 21H
+LEER_ARCHIVO ENDM
+
+
+ABRIR_ARCHIVO MACRO RUTA,MODO
+    MOV AH,3DH
+    LEA DX,RUTA
+    MOV AL,MODO
+    INT 21H
+ABRIR_ARCHIVO ENDM  
+
+LEER_CADENA MACRO CADENA
+	MOV AH,10
+	LEA DX,CADENA
+	INT 21H
+LEER_CADENA ENDM  
+
+IMPRIME_CAD_COLOR MACRO CADENA,LONG,REN,COL,PAG,COLOR,MODO
+    MOV AH,19
+    LEA BP,CADENA
+    MOV CX,LONG
+    MOV DH,REN
+    MOV DL,COL
+    MOV BH,PAG
+    MOV AL,MODO
+    MOV BL,COLOR
+    INT 10H
+IMPRIME_CAD_COLOR ENDM 
+;----------------------------------------------------------
+BEEP MACRO 
+    MOV AH,2
+    MOV DL,7
+    INT 21H
+BEEP ENDM
+;-------------------------------------------------------------------------------------------------------------------------------
+IMPRIMIR_TEXTO MACRO TEXTO,LONG,REN,COL,MODO,COLOR
+        MOV AH,19
+        LEA BP,TEXTO
+        MOV CX,LONG ;LONG
+        MOV DH,REN  ;REN
+        MOV DL,COL ;COL
+        MOV AL,MODO  ;MODO 
+        MOV BL,COLOR 
+        INT 10H
+IMPRIMIR_TEXTO ENDM
+;--------------------------------------------------------
+ESPECIES_PRINTER MACRO TITULO,e1,e2,e3,e4,e5
+  LOCAL CICLO_IMPRESORA_TITULO,CICLO1,CICLO2,CICLO3,CICLO4,CICLO5
+    MOV AH, 5
+    MOV DL, 12   ;INICIALIZAR LA IMPRESORA
+    INT 21H  
+    ;IMPRIMIMOS SOLO EL encabezado 
+    MOV DI,0                   
+    MOV CX, 33
+    MOV SI, OFFSET TITULO
+    
+    CICLO_IMPRESORA_TITULO:        
+            MOV AH, 5
+            MOV DL, [SI]
+            INT 21H    
+            INC SI
+    LOOP CICLO_IMPRESORA_TITULO  
+    ;SALTO DE LINEA
+    MOV AH, 5
+    MOV DL, 13
+    INT 21H
+       MOV AH, 5
+       MOV DL, 9
+       INT 21H
+    MOV CX, 33   ;INICIALIZAR CX
+    MOV DI,0
+    MOV SI, OFFSET E1
+    ciclo1:
+            MOV AH, 5
+            MOV DL, [SI]
+            INT 21H
+            INC SI
+     LOOP ciclo1 
+    ;-------------------------------------------------------------
+    MOV AH, 5
+    MOV DL, 13
+    INT 21H
+    MOV AH, 5
+    MOV DL, 9
+    INT 21H
+    MOV CX,33  ;INICIALIZAR CX
+    MOV DI,0
+    MOV SI, OFFSET E2
+    ciclo2:
+        MOV AH, 5
+        MOV DL, [SI]
+        INT 21H
+        INC SI
+     LOOP ciclo2
+    ;-------------------------------------------------------------
+    MOV AH, 5
+    MOV DL, 13
+    INT 21H
+    MOV AH, 5
+    MOV DL, 9
+    INT 21H
+    MOV CX,33  ;INICIALIZAR CX
+    MOV DI,0    
+    MOV SI, OFFSET E3
+    ciclo3:
+        MOV AH, 5
+        MOV DL, [SI]
+        INT 21H
+        INC SI
+     LOOP ciclo3     
+    ;-------------------------------------------------------------
+    MOV AH, 5
+    MOV DL, 13
+    INT 21H
+    MOV AH, 5
+    MOV DL, 9
+    INT 21H
+    MOV CX,33  ;INICIALIZAR CX
+    MOV DI,0    
+    MOV SI, OFFSET E4
+    ciclo4:
+        MOV AH, 5
+        MOV DL, [SI]
+        INT 21H
+        INC SI
+     LOOP ciclo4     
+    ;-------------------------------------------------------------
+    MOV AH, 5
+    MOV DL, 13
+    INT 21H
+    MOV AH, 5
+    MOV DL, 9
+    INT 21H
+    MOV CX,33  ;INICIALIZAR CX
+    MOV DI,0
+    MOV SI, OFFSET E5
+    ciclo5:
+        MOV AH, 5
+        MOV DL, [SI]
+        INT 21H
+        INC SI
+     LOOP ciclo5   
+ESPECIES_PRINTER ENDM
+
+;***************MIS NUEVAS MACROS***************
+CARACTER_COLOR MACRO veces, caracter, pagina, color
+    MOV AH, 9     
+    MOV CX, veces     
+    MOV AL, caracter   
+    MOV BH, pagina     
+    MOV BL, color
+    INT 10H
+CARACTER_COLOR ENDM
